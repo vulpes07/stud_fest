@@ -5,3 +5,10 @@ services:
     plan: free
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python main.py"
+    envVars:
+      - key: BOT_TOKEN
+        value: 7530073030:AAGbQeYyQ8VlKOKLzh4fily_UmWYsnMNwKk
+      - key: ADMIN_ID
+        value: "5649531166"
+      - key: MISTRAL_API_KEY
+        value: 2XS1wDi4vhqFUPztjzXmu1oMrVA4jdOv
