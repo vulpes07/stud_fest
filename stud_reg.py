@@ -7,10 +7,9 @@ from aiogram.fsm.state import State, StatesGroup
 from database import init_db, add_user, list_users, remove_user
 from reply_keyboard import menu_eng, menu, menu_germ, menu_kyrg
 from reply_keyboard import response_menu, response_menu_eng, response_menu_germ, response_menu_kyrg
-
-
 from reply_keyboard import menu_2_germ, menu_2_kyrg, menu_2_eng, menu_2
-
+from dotenv import load_dotenv
+load_dotenv()
 
 
 router = Router()
