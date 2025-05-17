@@ -57,7 +57,7 @@ def is_admin(user_id: int) -> bool:
 keyboard_eng = ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="🔍 Choose professions")],
-            [KeyboardButton(text="➕ Add users")],
+            [KeyboardButton(text="➕ Add user")],
             [KeyboardButton(text="📋 List of the users")],
             [KeyboardButton(text="❌ Remove the user")]
         ],
