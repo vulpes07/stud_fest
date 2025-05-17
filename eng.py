@@ -78,22 +78,7 @@ keyboard_2_eng = ReplyKeyboardMarkup(
 @router_eng.message(Command("start_eng"))
 async def cmd_start_eng(message: types.Message):
     keyboard_eng = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="🔍 Choose professions")],
-            [KeyboardButton(text="➕ Add users")],
-            [KeyboardButton(text="📋 List of the users")],
-            [KeyboardButton(text="❌ Remove the user")]
-        ],
-        resize_keyboard=True
-    )
-    keyboard_2_eng = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="🛠 Admin Panel")],
-            [KeyboardButton(text="➕ Register")]
-        ],
-        resize_keyboard=True
-    )
-    
+
     await message.answer(
             f"""👋 Hello, {message.from_user.first_name}! Welcome to the telegram bot that can determine some OSHsu professions that suit you. You have to register before you use this bot. Provided by you have already registered, press /info.
 
