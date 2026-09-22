@@ -158,14 +158,14 @@ async def load_age(message: types.Message, state: FSMContext):
     await state.update_data(age=int(message.text))
     await state.set_state(FSMAdminAddEng.gender) 
     await message.answer("What's your gender:", reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Male", callback_data="gender_male")],
-        [InlineKeyboardButton(text="Female", callback_data="gender_female")]
+        [InlineKeyboardButton(text="Male", callback_data="gender_eng_male")],
+        [InlineKeyboardButton(text="Female", callback_data="gender_eng_female")]
     ]))
     await state.set_state(FSMAdminAddEng.gender)
 
-@router_eng.callback_query(lambda call: call.data.startswith("gender_"))
+@router_eng.callback_query(lambda call: call.data.startswith("gender_eng_"))
 async def load_gender(callback_query: types.CallbackQuery, state: FSMContext):
-    gender = "Male" if callback_query.data == "gender_male" else "Female"
+    gender = "Male" if callback_query.data == "gender_eng_male" else "Female"
     await state.update_data(gender=gender)
     await callback_query.message.answer("Enter your phone number:")
     await state.set_state(FSMAdminAddEng.ph_num)
