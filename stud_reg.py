@@ -193,7 +193,7 @@ async def load_age(message: types.Message, state: FSMContext):
     ]))
     await state.set_state(FSMAdminAdd.gender)
 
-@router.callback_query(lambda call: call.data.startswith("gender_ru"))
+@router.callback_query(lambda call: call.data.startswith("gender_ru_"))
 async def load_gender(callback_query: types.CallbackQuery, state: FSMContext):
     
     data = await state.get_data()
