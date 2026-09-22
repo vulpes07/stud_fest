@@ -90,7 +90,7 @@ For additional information abot professions and tuition fees: https://www.oshsu.
 
 Choose the function:""",
             reply_markup=keyboard_2_eng
-        )
+        ))
 
 @router_eng.message(Command("admin"))
 async def admin_greeting(message: types.Message):
