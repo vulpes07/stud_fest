@@ -22,56 +22,44 @@ if not BOT_TOKEN or not ADMIN_ID:
 
 
 
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+import asyncio  
+
+GEMINI_MODEL = "gemini-3.6-flash"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 async def ask_mistral(prompt: str) -> str:
-    if not MISTRAL_API_KEY:
-        return "❌ Ключ MISTRAL_API_KEY не найден!"
+    if not GEMINI_API_KEY:
+        return "❌ Ключ GEMINI_API_KEY не найден!"
 
-    url = "https://api.mistral.ai/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {MISTRAL_API_KEY}",
-        "Content-Type": "application/json"
-    }
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
     payload = {
-        "model": "mistral-medium",
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.7
+        "contents": [{"parts": [{"text": prompt}]}]
     }
 
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                url,
-                headers=headers,
-                json=payload,
-                timeout=10000.0  
-            )
-            print("Status:", response.status_code)
-            print("Response text:", response.text)
-            response.raise_for_status()
-            return response.json()["choices"][0]["message"]["content"]
-    except httpx.HTTPStatusError as http_err:
-        return f"❌ HTTP ошибка: {http_err.response.status_code}\n{http_err.response.text}"
-    except httpx.ReadTimeout:
-        return "❌ Ошибка: сервер не ответил вовремя (таймаут)."
-    except Exception as e:
-        return f"❌ Ошибка запроса: {repr(e)}"
+    max_retries = 4
+    for attempt in range(max_retries):
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(url, json=payload, timeout=60.0)
 
+                if response.status_code == 503:
+                    wait = 3 * (attempt + 1)  # 3, 6, 9, 12 секунд
+                    await asyncio.sleep(wait)
+                    continue
+
+                response.raise_for_status()
+                data = response.json()
+                return data["candidates"][0]["content"]["parts"][0]["text"]
+
+        except httpx.HTTPStatusError as http_err:
+            return f"❌ HTTP ошибка: {http_err.response.status_code}\n{http_err.response.text}"
+        except httpx.ReadTimeout:
+            return "❌ Ошибка: сервер не ответил вовремя (таймаут)."
+        except Exception as e:
+            return f"❌ Ошибка запроса: {repr(e)}"
+
+    return "❌ Сервис Gemini сейчас перегружен. Попробуйте пройти тест ещё раз через минуту."
     
-
-    try:
-        
-        async with httpx.AsyncClient() as client:
-            response = await client.post(url, headers=headers, json=payload)
-            print("Status:", response.status_code)
-            print("Response text:", response.text)
-            response.raise_for_status()
-            return response.json()["choices"][0]["message"]["content"]
-    except httpx.HTTPStatusError as http_err:
-        return f"❌ HTTP ошибка: {http_err.response.status_code}\n{http_err.response.text}"
-    except Exception as e:
-        return f"❌ Ошибка запроса: {repr(e)}"
-
 
 specialties = {
     "ИНСТИТУТ ФИЛОЛОГИИ И МЕЖКУЛЬТУРНОЙ КОММУНИКАЦИИ":[
