@@ -160,7 +160,7 @@ async def load_age(message: types.Message, state: FSMContext):
 
 @router_germ.callback_query(lambda call: call.data.startswith("gender_germ_"))
 async def load_gender(callback_query: types.CallbackQuery, state: FSMContext):
-    gender = "Mann" if callback_query.data == "gender__germ_male" else "Frau"
+    gender = "Mann" if callback_query.data == "gender_germ_male" else "Frau"
     await state.update_data(gender=gender)
     await callback_query.message.answer("Geben Sie Ihre Telefonnummer ein:")
     await state.set_state(FSMAdminAddGerm.ph_num)
